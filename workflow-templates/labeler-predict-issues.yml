@@ -19,7 +19,7 @@ on:
 
 jobs:
   predict-issues:
-    if: ${{ inputs.issue_numbers || github.event.issue.number }}
+    if: ${{ github.repository_owner == 'jeffhandley' && (inputs.issue_numbers || github.event.issue.number) }}
     permissions:
       issues: write
     uses: jeffhandley/github-ml-labeler/.github/workflows/predict-issues.yml@main

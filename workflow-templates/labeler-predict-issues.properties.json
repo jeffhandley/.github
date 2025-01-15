@@ -1,5 +1,6 @@
 {
     "name": "Labeler: Predict Issue Labels",
     "description": "Predict labels for issues when they are opened",
-    "iconName": "octicon tag"
+    "iconName": "octicon tag",
+    "categories": ["utilities"]
 }
