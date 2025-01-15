@@ -1,0 +1,5 @@
+{
+    "name": "Labeler: Train Models",
+    "description": "Download data, train and test models, and stage them for promotion",
+    "iconName": "octicon tag"
+}

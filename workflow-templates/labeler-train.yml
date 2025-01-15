@@ -1,4 +1,4 @@
-name: "Labeler: Stage Models"
+name: "Labeler: Train Models"
 
 on:
   # Dispatched via the Actions UI, stages new models for promotion consideration
@@ -52,7 +52,7 @@ jobs:
       issues: read
       pull-requests: read
       actions: write
-    uses: jeffhandley/github-ml-labeler/.github/workflows/stage-models.yml@main
+    uses: jeffhandley/github-ml-labeler/.github/workflows/train.yml@main
     with:
       download_issues: ${{ inputs.download_issues }}
       train_issues: ${{ inputs.train_issues }}
