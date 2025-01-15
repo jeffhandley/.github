@@ -47,7 +47,7 @@ on:
         default: "staging"
 
 jobs:
-  labeler-stage-models:
+  labeler-train:
     permissions:
       issues: read
       pull-requests: read
