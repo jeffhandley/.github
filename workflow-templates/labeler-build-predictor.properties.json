@@ -1,6 +1,0 @@
-{
-    "name": "Labeler: Build Predictor App",
-    "description": "Build the Predictor app used by the Labeler workflows",
-    "iconName": "octicon tag",
-    "categories": ["utilities"]
-}
