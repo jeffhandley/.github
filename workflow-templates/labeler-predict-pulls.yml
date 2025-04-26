@@ -44,7 +44,7 @@ jobs:
     steps:
       - name: "Restore pulls model from cache"
         id: restore-model
-        uses: jeffhandley/issue-labeler/restore@main
+        uses: jeffhandley/issue-labeler/restore@65943219795a6ac3abb8509c3ee706249490e62f # v2.0.0
         with:
           type: pulls
           fail-on-cache-miss: ${{ env.ALLOW_FAILURE }}
@@ -53,7 +53,7 @@ jobs:
       - name: "Predict pull labels"
         id: prediction
         if: ${{ steps.restore-model.outputs.cache-hit == 'true' }}
-        uses: jeffhandley/issue-labeler/predict@main
+        uses: jeffhandley/issue-labeler/predict@65943219795a6ac3abb8509c3ee706249490e62f # v2.0.0
         with:
           pulls: ${{ inputs.pulls || github.event.number }}
           label_prefix: ${{ env.LABEL_PREFIX }}
