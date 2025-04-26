@@ -1,6 +1,6 @@
 {
-    "name": "Labeler: Predict Pull Labels",
-    "description": "Predict labels for pull requests when they are opened",
+    "name": "Labeler: Predict (Pulls)",
+    "description": "Predict labels for Pull Requests using a trained model.",
     "iconName": "octicon tag",
     "categories": ["utilities"]
 }

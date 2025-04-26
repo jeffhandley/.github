@@ -1,6 +1,6 @@
 {
-    "name": "Labeler: Train Models",
-    "description": "Download data, train and test models, and stage them for promotion",
+    "name": "Labeler: Training",
+    "description": "Train the Issues and Pull Requests models for label prediction.",
     "iconName": "octicon tag",
     "categories": ["utilities"]
 }

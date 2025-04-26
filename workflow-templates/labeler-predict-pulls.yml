@@ -1,4 +1,5 @@
-name: "Labeler: Predict Pull Labels"
+name: "Labeler: Predict (Pulls)"
+description: "Predict labels for Pull Requests using a trained model."
 
 on:
   # Per to the following documentation:
@@ -13,29 +14,51 @@ on:
   # Only automatically predict area labels when pull requests are first opened
   pull_request_target:
     types: opened
-    branches: $default-branch
 
   # Allow dispatching the workflow via the Actions UI, specifying ranges of numbers
   workflow_dispatch:
     inputs:
-      pull_numbers:
-        description: "Pull Numbers (comma-separated list of ranges)"
-        type: string
-      model_cache_key:
-        description: "The cache key suffix to use for loading the model"
-        type: string
+      pulls:
+        description: "Pull Request Numbers (comma-separated list of ranges)."
         required: true
-        default: "LIVE"
+      cache_key:
+        description: "The cache key suffix to use for restoring the model. Defaults to 'ACTIVE'."
+        required: true
+        default: "ACTIVE"
+
+env:
+  # Do not allow failure for jobs triggered automatically (this can block PR merge)
+  ALLOW_FAILURE: ${{ github.event_name == 'workflow_dispatch' }}
+
+  LABEL_PREFIX: "area-"
+  THRESHOLD: 0.40
+  DEFAULT_LABEL: "needs-area-label"
 
 jobs:
-  predict-pulls:
-    if: ${{ github.repository_owner == 'jeffhandley' && (inputs.pull_numbers || github.event.number) }}
+  predict-pull-label:
+    # Do not automatically run the workflow on forks outside the 'jeffhandley' org
+    if: ${{ github.event_name == 'workflow_dispatch' || github.repository_owner == 'jeffhandley' }}
+    runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    uses: jeffhandley/github-ml-labeler/.github/workflows/predict-pulls.yml@main
-    with:
-      model_cache_key: ${{ inputs.model_cache_key }}
-      pull_numbers: ${{ inputs.pull_numbers || github.event.number }}
-      label_prefix: "area-"
-      threshold: 0.40
-      default_label: "needs-area-label"
+    steps:
+      - name: "Restore pulls model from cache"
+        id: restore-model
+        uses: jeffhandley/issue-labeler/restore@main
+        with:
+          type: pulls
+          fail-on-cache-miss: ${{ env.ALLOW_FAILURE }}
+          quiet: true
+
+      - name: "Predict pull labels"
+        id: prediction
+        if: ${{ steps.restore-model.outputs.cache-hit == 'true' }}
+        uses: jeffhandley/issue-labeler/predict@main
+        with:
+          pulls: ${{ inputs.pulls || github.event.number }}
+          label_prefix: ${{ env.LABEL_PREFIX }}
+          threshold: ${{ env.THRESHOLD }}
+          default_label: ${{ env.DEFAULT_LABEL }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        continue-on-error: ${{ !env.ALLOW_FAILURE }}
